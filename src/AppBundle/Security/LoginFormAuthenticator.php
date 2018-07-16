@@ -10,8 +10,10 @@ namespace AppBundle\Security;
 
 
 use AppBundle\Form\LoginForm;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -20,10 +22,14 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     private $formFactory;
+    private $em;
+    private $router;
 
-    public function __construct(FormFactoryInterface $formFactory)
+    public function __construct(FormFactoryInterface $formFactory, EntityManager $em, RouterInterface $router)
     {
         $this->formFactory = $formFactory;
+        $this->em = $em;
+        $this->router = $router;
     }
 
     public function getCredentials(Request $request)
@@ -42,12 +48,31 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        // TODO: Implement getUser() method.
+        $username = $credentials['_username'];
+
+        return $this->em->getRepository('AppBundle:User')
+            ->findOneBy(['email' => $username]);
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        // TODO: Implement checkCredentials() method.
+        $password = $credentials['_password'];
+
+        if ($password =='iliketurtles') {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function getLoginUrl()
+    {
+        return $this->router->generate('security_login');
+    }
+
+    protected function getDefaultSuccessRedirectUrl()
+    {
+        return $this->router->generate('homepage');
     }
 
 }
