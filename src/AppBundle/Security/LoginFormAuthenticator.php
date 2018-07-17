@@ -36,7 +36,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $isLoginSubmit = $request->getPathInfo() == '/login' && $request->isMethod('POST');
         if (!$isLoginSubmit) {
-            return;
+            return null;
         }
 
         $form = $this->formFactory->create(LoginForm::class);
