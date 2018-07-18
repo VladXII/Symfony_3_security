@@ -60,7 +60,7 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
-
+        $this->password = null;
     }
 
     /**
@@ -77,5 +77,22 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+        $this->password = null;
     }
 }
