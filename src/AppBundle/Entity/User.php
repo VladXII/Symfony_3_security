@@ -24,12 +24,19 @@ class User implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
-    private  $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", unique=true)
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $password;
+
+    private $plainPassword;
 
     public function getUsername()
     {
@@ -43,7 +50,7 @@ class User implements UserInterface
 
     public function getPassword()
     {
-
+        return $this->password;
     }
 
     public function getSalt()
@@ -62,5 +69,13 @@ class User implements UserInterface
     public function setEmail($email)
     {
         $this->email = $email;
+    }
+
+    /**
+     * @param mixed $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
     }
 }
