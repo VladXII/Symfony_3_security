@@ -27,11 +27,13 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", unique=true)
+     *@ORM\Column(type="string", unique=true)
      */
     private $email;
 
     /**
+     * The encoded password
+     *
      * @ORM\Column(type="string")
      */
     private $password;
@@ -60,7 +62,7 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
-        $this->password = null;
+        $this->plainPassword = null;
     }
 
     /**
