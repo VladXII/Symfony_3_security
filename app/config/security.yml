@@ -1,8 +1,6 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/book/security.html
 security:
-    access_control:
-        - { path: ^/admin, roles: ROLE_USER }
 
     encoders:
         AppBundle\Entity\User: bcrypt
@@ -26,6 +24,7 @@ security:
                     - app.security.login_form_authenticator
             logout:
                 path: /logout
+
             # activate different ways to authenticate
 
             # http_basic: ~
@@ -33,3 +32,6 @@ security:
 
             # form_login: ~
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+    access_control:
+            - { path: ^/admin, roles: ROLE_ADMIN }
