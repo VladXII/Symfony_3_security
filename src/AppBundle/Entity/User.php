@@ -97,4 +97,5 @@ class User implements UserInterface
         $this->plainPassword = $plainPassword;
         $this->password = null;
     }
+
 }
