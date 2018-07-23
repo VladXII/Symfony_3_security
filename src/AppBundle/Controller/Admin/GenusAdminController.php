@@ -7,6 +7,7 @@ use AppBundle\Form\GenusFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Role\Role;
 
 /**
  * @Route("/admin")
@@ -18,13 +19,20 @@ class GenusAdminController extends Controller
      */
     public function indexAction()
     {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+            throw $this->createAccessDeniedException('Get out!');
+        }
+
         $genuses = $this->getDoctrine()
             ->getRepository('AppBundle:Genus')
             ->findAll();
 
-        return $this->render('admin/genus/list.html.twig', array(
-            'genuses' => $genuses
-        ));
+        return $this->render(
+            'admin/genus/list.html.twig',
+            array(
+                'genuses' => $genuses,
+            )
+        );
     }
 
     /**
@@ -48,9 +56,12 @@ class GenusAdminController extends Controller
             return $this->redirectToRoute('admin_genus_list');
         }
 
-        return $this->render('admin/genus/new.html.twig', [
-            'genusForm' => $form->createView()
-        ]);
+        return $this->render(
+            'admin/genus/new.html.twig',
+            [
+                'genusForm' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -74,8 +85,11 @@ class GenusAdminController extends Controller
             return $this->redirectToRoute('admin_genus_list');
         }
 
-        return $this->render('admin/genus/edit.html.twig', [
-            'genusForm' => $form->createView()
-        ]);
+        return $this->render(
+            'admin/genus/edit.html.twig',
+            [
+                'genusForm' => $form->createView(),
+            ]
+        );
     }
 }
